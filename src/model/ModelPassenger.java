@@ -145,10 +145,10 @@ public class ModelPassenger {
         int result = 0;
         lcdb = new ConnectDatabaseSQL();
         conn = lcdb.getConnectData();
-        String sql = "DELETE FROM passengers WHERE id = ?";
+        String sql = " DELETE  FROM passengers WHERE id = '"+id+"'";
         try {
             pst = conn.prepareStatement(sql);
-            pst.setInt(1, id);
+          
             result = pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ModelEmployee.class.getName()).log(Level.SEVERE, null, ex);

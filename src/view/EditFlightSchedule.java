@@ -217,26 +217,57 @@ public class EditFlightSchedule extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if (jTextFieldNameFlightSchedule.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter  Name FlightSchedule ");
+            return;
+        }
+        String name = jTextFieldNameFlightSchedule.getText();
+        if (dateTimePickerStart.getDateTimePermissive() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter  time start ");
+            return;
+        }
         Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+        if (dateTimePickerFinish.getDateTimePermissive() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter time finish ");
+            return;
+        }
         Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
         java.sql.Timestamp start = new java.sql.Timestamp(timestampStart.getTime());
         java.sql.Timestamp finish = new java.sql.Timestamp(timestampFinish.getTime());
-        if(start.after(finish)){
+        if (start.after(finish)) {
             JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
-        }else{
-            objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-            objPilot = (Pilot)jComboBoxPilot.getSelectedItem();
-            int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+        } else {
+            objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+            if (("---- Choose Airplane ----").equals(objAirplane.getName())) {
+                JOptionPane.showMessageDialog(null, "Please select  Airplane ");
+                return;
+            }
+            objPilot = (Pilot) jComboBoxPilot.getSelectedItem();
+            if (("---- Choose Pilot ----").equals(objPilot.getName())) {
+                JOptionPane.showMessageDialog(null, "Please select  Pilot ");
+                return;
+            }
+            int numberSeatNo = 0;
+            if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo ");
+                return;
+            }
+            try {
+                numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo type number ");
+                return;
+            }
             objFlightSchedule = new FlightSchedule(Integer.parseInt(jTextFieldIdFlightSchedule.getText()), jTextFieldNameFlightSchedule.getText(), timestampStart, timestampFinish, objAirplane.getId(), objPilot.getId(), numberSeatNo);
-            if(objFlightSchedule != null){
+            if (objFlightSchedule != null) {
                 int result = controllerFlightSchedule.editFlightSchedule(objFlightSchedule);
-                if(result > 0){
+                if (result > 0) {
                     JOptionPane.showMessageDialog(null, "Edit suceessfully!");
                     EditFlightSchedule.this.dispose();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Error. Please try again!");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Please check validate!");
             }
         }

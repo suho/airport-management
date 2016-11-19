@@ -250,8 +250,9 @@ public class EmployeeManagement extends javax.swing.JPanel {
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         row = tbMain.getSelectedRow();
-        Employee item = controllerEmployee.getValueAtRows(row);
+       
         if(row >= 0){
+             Employee item = controllerEmployee.getValueAtRows(row);
             int result = JOptionPane.showConfirmDialog(null, "Are you sure?",null, JOptionPane.YES_NO_OPTION);
             if(result == JOptionPane.YES_OPTION) {
                 int resultDelete = controllerEmployee.deleteEmployee(item.getId(), row);

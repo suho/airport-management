@@ -25,6 +25,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import library.ConvertDate;
+import validate.CheckMail;
 /**
  *
  * @author DELL
@@ -394,7 +395,7 @@ public class EditEmployee extends javax.swing.JFrame {
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         // TODO add your handling code here:
-        int idEmployee = Integer.parseInt(jTextFieldIdEmployee.getText());
+       int idEmployee = Integer.parseInt(jTextFieldIdEmployee.getText());
         String fullName = jTextFieldFullName.getText();
         if(file != null){
             File fileOld = new File("files/" + objEmployee.getAvatar());
@@ -403,19 +404,41 @@ public class EditEmployee extends javax.swing.JFrame {
             }
             upLoadFile(file);
         }
+        if(datePickerBirthday.getDateStringOrEmptyString().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter Birthday ");
+            return;
+        }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
+         if(buttonGroupGender.getSelection()==null){
+            JOptionPane.showMessageDialog(null, "Please enter Gender ");
+            return;
+        }
         String gender = buttonGroupGender.getSelection().getActionCommand();
         String idCard = jTextFieldIdCard.getText();
         String religion = jTextFieldReligion.getText();
         String ethnicMinority = jTextFieldEthnicMinority.getText();
         String department = jTextFieldDepartment.getText();
-        float salary = Float.parseFloat(jTextFieldSalary.getText());
+       float salary =0;
+        if(jTextFieldSalary.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter Salary ");
+            return;
+        }
+        try{
+         salary = Float.parseFloat(jTextFieldSalary.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Please enter Salary dạng số ");
+            return;
+        }
         String position = jTextFieldPosition.getText();
         String phone = jTextFieldPhone.getText();
         String email = jTextFieldEmail.getText();
         String address = jTextFieldAddress.getText();
         String permission = jTextFieldPermission.getText();
         Employee editEmployee = new Employee(idEmployee, fullName, fileName, sqlBirthday, gender, idCard, religion, ethnicMinority, department, position, salary, email, address, phone, permission);
+        if (!isValid( editEmployee)) {
+            return;
+
+        }
         int result = controllerEmployee.editEmployee(editEmployee);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Edit successfully!");
@@ -456,6 +479,65 @@ public class EditEmployee extends javax.swing.JFrame {
             Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
         }
         file = null;
+    }
+    private boolean isValid(Employee objItem) {
+        CheckMail checkMail = new CheckMail();
+        if (objItem.getFullName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  fullname");
+            return false;
+        }
+       
+        if (objItem.getIdCard().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter ID card");
+            return false;
+        }
+        if (!objItem.getIdCard().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid ID card format");
+            return false;
+        }
+        if (objItem.getEthicMinority().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter EthicMinority");
+            return false;
+        }
+        if (objItem.getPosition().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Position");
+            return false;
+        }
+        if (objItem.getPhone().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Phone");
+            return false;
+        }
+         if (!objItem.getPhone().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid Phone format");
+            return false;
+        }
+        if (objItem.getEmail().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Email");
+            return false;
+        }
+         if(checkMail.isValidEmailAddress(objItem.getEmail())== false){
+             JOptionPane.showMessageDialog(this, "Please enter a valid email format");
+            return false;
+         }
+        if (objItem.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Address");
+            return false;
+        }
+        if (objItem.getReligion().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Religion");
+            return false;
+        }
+        if (objItem.getDepartment().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Department");
+            return false;
+        }
+       
+        if (objItem.getPermission().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Permission");
+            return false;
+        }
+       return  true;
+
     }
     /**
      * @param args the command line arguments

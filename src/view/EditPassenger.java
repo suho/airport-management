@@ -248,17 +248,28 @@ public class EditPassenger extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
-        // TODO add your handling code here:
-        int idPassenger = Integer.parseInt(jTextFieldIdPassenger.getText());
+         int idPassenger = Integer.parseInt(jTextFieldIdPassenger.getText());
         String passport = jTextFieldPassport.getText();
         String fullName = jTextFieldFullName.getText();
+         if(datePickerBirthday.getDateStringOrEmptyString().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter Birthday ");
+            return;
+        }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
         String nativeCountry = jTextFieldNative.getText();
+        if(buttonGroupGender.getSelection()==null){
+            JOptionPane.showMessageDialog(null, "Please enter Gender ");
+            return;
+        }
         String gender = buttonGroupGender.getSelection().getActionCommand();
         String nationality = jTextFieldNationality.getText();
         String phone = jTextFieldPhone.getText();
         String address = jTextFieldAddress.getText();
         Passenger objPassenger = new Passenger(idPassenger, passport, fullName, sqlBirthday, nativeCountry, gender, nationality, phone, address);
+        if (!isValid( objPassenger)) {
+            return;
+
+        }
         int result = controllerPassenger.editPassenger(objPassenger);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Edit uccessfully!");
@@ -267,7 +278,43 @@ public class EditPassenger extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error. Please try again!");
         }
     }//GEN-LAST:event_jButtonSubmitActionPerformed
+    private boolean isValid(Passenger objItem) {
+        if (objItem.getPassport().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  Passport");
+            return false;
+        }
+         if (!objItem.getPassport().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid Passport format");
+            return false;
+        }
+        if (objItem.getFullName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  fullname");
+            return false;
+        }
+       if (objItem.getNativeCountry().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter NativeCountry");
+            return false;
+        }
+        if (objItem.getNationality().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Nationality");
+            return false;
+        }
+        if (objItem.getPhone().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Phone");
+            return false;
+        }
+        if (!objItem.getPhone().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid Phone format");
+            return false;
+        }
+        if (objItem.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Address");
+            return false;
+        }
+        
+       return  true;
 
+    }
     /**
      * @param args the command line arguments
      */

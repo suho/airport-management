@@ -86,7 +86,7 @@ public class ModelEmployee {
         conn = lcdb.getConnectData();
         String sql = "INSERT INTO employees(fullName, avatar, birthday, gender, idCard, religion, ethnicMinority, department, position, salary, phone, email, address, permission) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try {
-            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, objEmployee.getFullName());
             pst.setString(2, objEmployee.getAvatar());
             pst.setDate(3, (Date)objEmployee.getBirthday());
@@ -101,7 +101,12 @@ public class ModelEmployee {
             pst.setString(12, objEmployee.getEmail());
             pst.setString(13, objEmployee.getAddress());
             pst.setString(14, objEmployee.getPermission());
-            result = pst.executeUpdate();
+             pst.executeUpdate();
+            ResultSet rsk = pst.getGeneratedKeys();
+            if(rsk.next()){
+                result  = rsk.getInt(1);
+               
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -181,10 +186,11 @@ public class ModelEmployee {
         int result = 0;
         lcdb = new ConnectDatabaseSQL();
         conn = lcdb.getConnectData();
-        String sql = "DELETE FROM employees WHERE id = ?";
+        String sql = "DELETE FROM users WHERE idEmployee =? ; DELETE FROM employees WHERE id = ?";
         try {
             pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
+            pst.setInt(2, id);
             result = pst.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ModelEmployee.class.getName()).log(Level.SEVERE, null, ex);

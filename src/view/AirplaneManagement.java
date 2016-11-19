@@ -204,8 +204,9 @@ public class AirplaneManagement extends javax.swing.JPanel {
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         // TODO add your handling code here:
         row = tbMain.getSelectedRow();
-        Airplane item = controllerAirplane.getValueAtRows(row);
+      
         if(row >= 0){
+              Airplane item = controllerAirplane.getValueAtRows(row);
             int result = JOptionPane.showConfirmDialog(null, "Are you sure?",null, JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                 int resultDelete = controllerAirplane.deleteAirplane(item.getId(), row);

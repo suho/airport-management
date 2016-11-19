@@ -201,6 +201,19 @@ public class AddFlightSchedule extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if (jTextFieldNameFlightSchedule.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter  Name FlightSchedule ");
+            return;
+        }
+       // String name = jTextFieldNameFlightSchedule.getText();
+        if (dateTimePickerStart.getDateTimePermissive() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter time start ");
+            return;
+        }
+        if (dateTimePickerFinish.getDateTimePermissive() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter time finish ");
+            return;
+        }
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         System.out.println(dateFormat.format(cal.getTime()));
@@ -208,30 +221,47 @@ public class AddFlightSchedule extends javax.swing.JFrame {
         Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
         java.sql.Timestamp start = new java.sql.Timestamp(timestampStart.getTime());
         java.sql.Timestamp finish = new java.sql.Timestamp(timestampFinish.getTime());
-        if(start.before(cal.getTime())){
+        if (start.before(cal.getTime())) {
             JOptionPane.showMessageDialog(null, "You can't create a flight schedule with start time before time now!");
-        }else{
-            if(start.after(finish)){
-                JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
-            }else{
-                Airplane objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-                Pilot objPilot = (Pilot)jComboBoxPilot.getSelectedItem();
-                int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
-                objFlightSchdule = new FlightSchedule(0, jTextFieldNameFlightSchedule.getText(), timestampStart, timestampFinish, objAirplane.getId(), objPilot.getId(), numberSeatNo);
-                if(objFlightSchdule != null){
-                    int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchdule);
-                    if(idFlightSchedule > 0){
-                        int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
-                        if(result > 0){
-                            JOptionPane.showMessageDialog(null, "Create suceessfully!");
-                            AddFlightSchedule.this.dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Error. Please try again!");
-                        }
+        } else if (start.after(finish)) {
+            JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
+        } else {
+            Airplane objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+            if (("---- Choose Airplane ----").equals(objAirplane.getName())) {
+                JOptionPane.showMessageDialog(null, "Please select Airplane ");
+                return;
+            }
+            Pilot objPilot = (Pilot) jComboBoxPilot.getSelectedItem();
+            if (("---- Choose Pilot ----").equals(objPilot.getName())) {
+                JOptionPane.showMessageDialog(null, "Please select Pilot ");
+                return;
+            }
+            int numberSeatNo = 0;
+            if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo ");
+                return;
+            }
+            try {
+                numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter seatNo Number Type number ");
+                return;
+            }
+            objFlightSchdule = new FlightSchedule(0, jTextFieldNameFlightSchedule.getText(), timestampStart, timestampFinish, objAirplane.getId(), objPilot.getId(), numberSeatNo);
+            if (objFlightSchdule != null) {
+                int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchdule);
+                if (idFlightSchedule > 0) {
+                    int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
+                    if (result > 0) {
+                        JOptionPane.showMessageDialog(null, "Create suceessfully!");
+                        AddFlightSchedule.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error. Please try again!");
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Please check validate verry stupid!");
                 }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Please check validate verry stupid!");
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

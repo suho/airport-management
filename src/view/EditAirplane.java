@@ -133,6 +133,10 @@ public class EditAirplane extends javax.swing.JFrame {
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         // TODO add your handling code here:
         Airplane item = new Airplane(objAirplane.getId(), jTextFieldName.getText(), jTextFieldStart.getText(), jTextFieldFinish.getText());
+        if (!isValid(item)) {
+            return;
+
+        }
         int result = controllerAirplane.editAirplane(item);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Edit successfully!");
@@ -152,7 +156,25 @@ public class EditAirplane extends javax.swing.JFrame {
         jTextFieldStart.setText(objAirplane.getStartPlace());
         jTextFieldFinish.setText(objAirplane.getFinishPlace());
     }
-    
+    private boolean isValid(Airplane objItem) {
+
+        if (objItem.getName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  name");
+            return false;
+        }
+
+        if (objItem.getStartPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter start place");
+            return false;
+        }
+        if (objItem.getFinishPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter finish place");
+            return false;
+        }
+
+        return true;
+
+    }
     /**
      * @param args the command line arguments
      */

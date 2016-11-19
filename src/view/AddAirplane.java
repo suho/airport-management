@@ -130,6 +130,10 @@ public class AddAirplane extends javax.swing.JFrame {
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         // TODO add your handling code here:
         Airplane item = new Airplane(0, jTextFieldName.getText(), jTextFieldStart.getText(), jTextFieldFinish.getText());
+         if (!isValid(item)) {
+            return;
+
+        }
         int result = controllerAirplane.addAirplane(item);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Create successfully!");
@@ -142,7 +146,25 @@ public class AddAirplane extends javax.swing.JFrame {
         // TODO add your handling code here:
         AddAirplane.this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
+    private boolean isValid(Airplane objItem) {
 
+        if (objItem.getName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  name");
+            return false;
+        }
+
+        if (objItem.getStartPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter start place");
+            return false;
+        }
+        if (objItem.getFinishPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter finish place");
+            return false;
+        }
+
+        return true;
+
+    }
     /**
      * @param args the command line arguments
      */

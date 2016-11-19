@@ -31,6 +31,7 @@ import javax.swing.table.TableRowSorter;
  * @author DELL
  */
 public class EditFilghtSchedule1 extends javax.swing.JFrame {
+
     private ControllerAirplane controllerAirplane;
     private ControllerPilot controllerPilot;
     private ControllerFlightSchedule controllerFlightSchedule;
@@ -58,11 +59,11 @@ public class EditFilghtSchedule1 extends javax.swing.JFrame {
         controllerFlightSchedule.loadTable();
         controllerFlightSchedulePilot.loadTable();
         tbFindPilot.setOpaque(false);
-        
+
         tbFindPilot.setBackground(new Color(0, 0, 0, 0));
         this.loadActionListener();
     }
-    
+
     private void findAirplane(int id) {
         TableRowSorter sorter = new TableRowSorter(tbMain.getModel());
         tbMain.setRowSorter(sorter);
@@ -72,24 +73,25 @@ public class EditFilghtSchedule1 extends javax.swing.JFrame {
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
+
     private void findPilot(int[] id) {
         TableRowSorter sorter = new TableRowSorter(tbPilot.getModel());
         tbPilot.setRowSorter(sorter);
         ArrayList<RowFilter<AbstractTableModel, Object>> arList = new ArrayList<>();
-        for(int i = 0; i<id.length; i++){
+        for (int i = 0; i < id.length; i++) {
             RowFilter<AbstractTableModel, Object> filterAirplane = RowFilter.notFilter(RowFilter.regexFilter("(?i)" + id[i], 0));
             arList.add(filterAirplane);
         }
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
-    
-    public void loadActionListener(){
-        ((JLabel)jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-        jComboBoxAirplane.addActionListener (new ActionListener () {
+
+    public void loadActionListener() {
+        ((JLabel) jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        jComboBoxAirplane.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Airplane objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-                if(objAirplane.getId() != 0){
+                Airplane objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+                if (objAirplane.getId() != 0) {
                     findAirplane(objAirplane.getId());
                 }
             }
@@ -302,54 +304,51 @@ public class EditFilghtSchedule1 extends javax.swing.JFrame {
 
     private void jbCheckPilotMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbCheckPilotMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jbCheckPilotMouseClicked
 
     private void jbCheckPilotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckPilotActionPerformed
         // TODO add your handling code here:
-        objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-        if(objAirplane.getId() == 0){
+        objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+        if (objAirplane.getId() == 0) {
             JOptionPane.showMessageDialog(null, "Please choose air route!");
-        }else{
+        } else {
             Calendar cal = Calendar.getInstance();
-            if((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null) ){
+            if ((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null)) {
                 JOptionPane.showMessageDialog(null, "Please choose time!");
-            }else{
+            } else {
                 Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
                 Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
                 java.sql.Timestamp start = new java.sql.Timestamp(timestampStart.getTime());
                 java.sql.Timestamp finish = new java.sql.Timestamp(timestampFinish.getTime());
-                if(start.before(cal.getTime())){
+                if (start.before(cal.getTime())) {
                     JOptionPane.showMessageDialog(null, "You can't create a flight schedule with start time before time now!");
-                }else{
-                    if(start.after(finish)){
-                        JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
-                    }else{
-                        Timestamp timestampStart1 = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                        Timestamp timestampFinish1 = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                        java.sql.Timestamp start1 = new java.sql.Timestamp(timestampStart1.getTime());
-                        java.sql.Timestamp finish1 = new java.sql.Timestamp(timestampFinish1.getTime());
-                        for(int i = 0; i < tbMain.getRowCount(); i++){
-                            if(((start1.after((Date) tbMain.getValueAt(i, 2)))&&(start1.before((Date) tbMain.getValueAt(i, 3))))||((finish1.after((Date) tbMain.getValueAt(i, 2))&& (finish1.before((Date) tbMain.getValueAt(i, 3))))) || ((start1.before((Date) tbMain.getValueAt(i, 2)))&&(finish1.after((Date) tbMain.getValueAt(i, 3))))){
-                                JOptionPane.showMessageDialog(null, "Flight schedule already exist at "+ tbMain.getValueAt(i, 1) + ". Please try again!");
+                } else if (start.after(finish)) {
+                    JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
+                } else {
+                    Timestamp timestampStart1 = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+                    Timestamp timestampFinish1 = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+                    java.sql.Timestamp start1 = new java.sql.Timestamp(timestampStart1.getTime());
+                    java.sql.Timestamp finish1 = new java.sql.Timestamp(timestampFinish1.getTime());
+                    for (int i = 0; i < tbMain.getRowCount(); i++) {
+                        if (((start1.after((Date) tbMain.getValueAt(i, 2))) && (start1.before((Date) tbMain.getValueAt(i, 3)))) || ((finish1.after((Date) tbMain.getValueAt(i, 2)) && (finish1.before((Date) tbMain.getValueAt(i, 3))))) || ((start1.before((Date) tbMain.getValueAt(i, 2))) && (finish1.after((Date) tbMain.getValueAt(i, 3))))) {
+                            JOptionPane.showMessageDialog(null, "Flight schedule already exist at " + tbMain.getValueAt(i, 1) + ". Please try again!");
+                        } else {
+                            int rowCount = tbFindPilot.getRowCount();
+                            int[] a = new int[rowCount];
+                            for (int j = 0; j < tbFindPilot.getRowCount(); j++) {
+                                if (((start1.after((Date) tbFindPilot.getValueAt(j, 2))) && (start1.before((Date) tbFindPilot.getValueAt(j, 3)))) || ((finish1.after((Date) tbFindPilot.getValueAt(j, 2)) && (finish1.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start1.before((Date) tbFindPilot.getValueAt(j, 2))) && (finish1.after((Date) tbFindPilot.getValueAt(j, 3))))) {
+                                    a[j] = (int) tbFindPilot.getValueAt(i, 9);
+                                }
                             }
-                            else{
-                                int rowCount = tbFindPilot.getRowCount();
-                                int[] a= new int[rowCount];
-                                for(int j = 0; j < tbFindPilot.getRowCount(); j++){
-                                    if(((start1.after((Date) tbFindPilot.getValueAt(j, 2)))&&(start1.before((Date) tbFindPilot.getValueAt(j, 3))))||((finish1.after((Date) tbFindPilot.getValueAt(j, 2))&& (finish1.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start1.before((Date) tbFindPilot.getValueAt(j, 2)))&&(finish1.after((Date) tbFindPilot.getValueAt(j, 3))))){
-                                        a[j] = (int) tbFindPilot.getValueAt(i, 9);
-                                    }
-                                }
-                                if(a != null){
-                                    findPilot(a);
-                                }
+                            if (a != null) {
+                                findPilot(a);
                             }
                         }
                     }
                 }
             }
-            
+
         }
     }//GEN-LAST:event_jbCheckPilotActionPerformed
 
@@ -359,30 +358,46 @@ public class EditFilghtSchedule1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
-        if(idPilot == 0){
+        if (idPilot == 0) {
             JOptionPane.showMessageDialog(null, "Please choose pilot!");
-        }else{
-            if(jTextFieldNumberSeatNo.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please enter number seat No!");
-            }else{
-                int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
-                Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                objFlightSchedule = new FlightSchedule(0, objAirplane.getName(), timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
-                if(objFlightSchedule != null){
-                    int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
-                    if(idFlightSchedule > 0){
-                        int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
-                        if(result > 0){
-                            JOptionPane.showMessageDialog(null, "Create suceessfully!");
-                            EditFilghtSchedule1.this.dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Error. Please try again!");
-                        }
+        } else if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter number seat No!");
+        } else {
+           int numberSeatNo = 0;
+            if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo ");
+                return;
+            }
+            try {
+                numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo type number ");
+                return;
+            }
+            if (dateTimePickerStart.getDateTimePermissive() == null) {
+                JOptionPane.showMessageDialog(null, "Please enter  time start ");
+                return;
+            }
+            Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+            if (dateTimePickerFinish.getDateTimePermissive() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter time finish ");
+            return;
+        }
+            Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+            objFlightSchedule = new FlightSchedule(0, objAirplane.getName(), timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
+            if (objFlightSchedule != null) {
+                int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
+                if (idFlightSchedule > 0) {
+                    int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
+                    if (result > 0) {
+                        JOptionPane.showMessageDialog(null, "Create suceessfully!");
+                        EditFilghtSchedule1.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error. Please try again!");
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Please check validate!");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please check validate!");
             }
         }
     }//GEN-LAST:event_btSubmitActionPerformed

@@ -136,6 +136,10 @@ public class ControllerEmployee extends AbstractTableModel{
 
     public int addEmployee(Employee objEmployee) {
         int result = modelEmployee.addEmployee(objEmployee);
+        objEmployee.setId(result);
+        alEmployee.add(objEmployee);
+        this.fireTableDataChanged();
+        table.scrollRectToVisible(table.getCellRect(this.getRowCount()-1, 0, true));
         return result;
     }
 
