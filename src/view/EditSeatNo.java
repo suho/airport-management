@@ -56,7 +56,7 @@ public class EditSeatNo extends javax.swing.JFrame {
                 btSeatNo.setBackground(Color.YELLOW);
                 this.btSeatNo.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        JOptionPane.showMessageDialog(null, "You can not edit!");
+                        JOptionPane.showMessageDialog(null, "You can not choose this seat no!");
                     }
                 });
             }else{

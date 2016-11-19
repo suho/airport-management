@@ -16,8 +16,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +41,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     private Pilot objPilot;
     private int idPilot = 0;
     private int rowPilot;
+    private String nameFlight = "";
 
     /**
      * Creates new form NewJFrame1
@@ -60,7 +59,6 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         controllerFlightSchedule.loadTable();
         controllerFlightSchedulePilot.loadTable();
         tbFindPilot.setOpaque(false);
-        
         tbFindPilot.setBackground(new Color(0, 0, 0, 0));
         this.loadActionListener();
     }
@@ -113,6 +111,9 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         jComboBoxAirplane = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldNameFlight = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -152,6 +153,17 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         jPanel5.add(jLabel4);
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Name flight schedule:");
+        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 150, 40));
+
+        jTextFieldNameFlight.setMinimumSize(new java.awt.Dimension(150, 30));
+        jPanel7.add(jTextFieldNameFlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 440, 40));
+
+        jPanel1.add(jPanel7, java.awt.BorderLayout.PAGE_END);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
@@ -229,8 +241,8 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tbMain);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Number seatNo:");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -370,7 +382,12 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
                 int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
                 Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
                 Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                objFlightSchedule = new FlightSchedule(0, objAirplane.getName(), timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
+                if(jTextFieldNameFlight.getText().isEmpty()){
+                    nameFlight = jComboBoxAirplane.getName();
+                }else{
+                    nameFlight = jTextFieldNameFlight.getText();
+                }
+                objFlightSchedule = new FlightSchedule(0, nameFlight, timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
                 if(objFlightSchedule != null){
                     int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
                     if(idFlightSchedule > 0){
@@ -442,6 +459,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelRoute;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -449,9 +467,11 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField jTextFieldNameFlight;
     private javax.swing.JTextField jTextFieldNumberSeatNo;
     private javax.swing.JButton jbCheckPilot;
     private javax.swing.JTable tbFindPilot;

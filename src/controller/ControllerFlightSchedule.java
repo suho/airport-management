@@ -182,8 +182,7 @@ public class ControllerFlightSchedule extends AbstractTableModel{
         int result = modelFlightSchedule.doneFlightSchedule(item.getId());
         if(result > 0){
             int rowModel = table.convertRowIndexToModel(row);
-            alFlightSchedule.set(rowModel, item);
-            this.fireTableRowsUpdated(rowModel, rowModel);
+            alFlightSchedule.remove(rowModel);
             this.fireTableDataChanged();
         }
         return result;
