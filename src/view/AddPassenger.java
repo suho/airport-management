@@ -25,8 +25,9 @@ public class AddPassenger extends javax.swing.JFrame {
     private ControllerPassenger controllerPassenger;
     private ControllerTicket controllerTicket;
     private ControllerSeatNo controllerSeatNo;
-    private int idFlightSchedule1;
-    private int idSeatNo1;
+    private Passenger objPassenger;
+    private int idFlightSchedule1 = 0;
+    private int idSeatNo1 = 0;
     
 
     /**
@@ -275,28 +276,49 @@ public class AddPassenger extends javax.swing.JFrame {
         String nationality = jTextFieldNationality.getText();
         String phone = jTextFieldPhone.getText();
         String address = jTextFieldAddress.getText();
-        Passenger objPassenger = new Passenger(0, passport, fullName, sqlBirthday, nativeCountry, gender, nationality, phone, address);
-        if (!isValid( objPassenger)) {
-            return;
-
-        }
-        int idPassenger = controllerPassenger.addPassenger(objPassenger);
-        if(idPassenger > 0){
-            Ticket objTicket = new Ticket(0, idPassenger, idFlightSchedule1, idSeatNo1);
+        if((idFlightSchedule1 != 0) && (idSeatNo1 != 0) && (objPassenger != null)){
+            Ticket objTicket = new Ticket(0, objPassenger.getId(), idFlightSchedule1, idSeatNo1);
             int result = controllerTicket.addTicket(objTicket);
             if(result > 0){
                 int updateSeatNo = controllerSeatNo.updateSeatNo(idSeatNo1);
                 if(updateSeatNo > 0){
-                    JOptionPane.showMessageDialog(null, "Create successfully!");
+                    JOptionPane.showMessageDialog(null, "Order successfully!");
                     AddPassenger.this.dispose();
                 }else{
-                    JOptionPane.showMessageDialog(null, "Error. Please try again!");
+                    JOptionPane.showMessageDialog(null, "Error when order seat no. Please try again!");
                 }
             }else{
-                JOptionPane.showMessageDialog(null, "Error. Please try again!");
+                JOptionPane.showMessageDialog(null, "Error when order ticket. Please try again!");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Error. Please try again!");
+            Passenger objPassenger = new Passenger(0, passport, fullName, sqlBirthday, nativeCountry, gender, nationality, phone, address);
+			 if (!isValid( objPassenger)) {
+            return;
+
+			}
+            int idPassenger = controllerPassenger.addPassenger(objPassenger);
+            if((idPassenger > 0) && (idFlightSchedule1 != 0) && (idSeatNo1 != 0)){
+                Ticket objTicket = new Ticket(0, idPassenger, idFlightSchedule1, idSeatNo1);
+                int result = controllerTicket.addTicket(objTicket);
+                if(result > 0){
+                    int updateSeatNo = controllerSeatNo.updateSeatNo(idSeatNo1);
+                    if(updateSeatNo > 0){
+                        JOptionPane.showMessageDialog(null, "Order successfully!");
+                        AddPassenger.this.dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Error when order seat no. Please try again!");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error when order ticket. Please try again!");
+                }
+            }
+            if(idPassenger < 0){
+                JOptionPane.showMessageDialog(null, "Error when create passenger. Please try again!");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Create passenger successfully!");
+                AddPassenger.this.dispose();
+            }
         }
     }//GEN-LAST:event_jButtonSubmitActionPerformed
 
@@ -310,7 +332,7 @@ public class AddPassenger extends javax.swing.JFrame {
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
         // TODO add your handling code here:
         String passport = jTextFieldPassport.getText();
-        Passenger objPassenger = controllerPassenger.findPassenger(passport);
+        objPassenger = controllerPassenger.findPassenger(passport);
         if(objPassenger != null){
             JOptionPane.showMessageDialog(null, "Found successfully!");
             setForm(objPassenger);

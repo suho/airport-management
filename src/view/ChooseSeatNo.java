@@ -50,7 +50,7 @@ public class ChooseSeatNo extends javax.swing.JFrame {
                 btSeatNo.setBackground(Color.YELLOW);
                 this.btSeatNo.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                        btEditActionPerformed(((JButton) evt.getSource()).getActionCommand());
+                        JOptionPane.showMessageDialog(null, "You can not choose this seat no!");
                     }
                 });
             }else{
@@ -74,14 +74,6 @@ public class ChooseSeatNo extends javax.swing.JFrame {
         new AddPassenger(idFlightSchedule1, idIntegerSeatNo).setVisible(true);
         ChooseSeatNo.this.dispose();
     }
-    private void btEditActionPerformed(String idSeatNo) {
-        int result = JOptionPane.showConfirmDialog(null, 
-            "Do you want to edit?",null, JOptionPane.YES_NO_OPTION);
-        if(result == JOptionPane.YES_OPTION) {
-            // Delet seatNo
-            ChooseSeatNo.this.dispose();
-        } 
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,14 +85,42 @@ public class ChooseSeatNo extends javax.swing.JFrame {
     private void initComponents() {
 
         pnCenter = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        pnCenter.setLayout(new java.awt.GridLayout(1, 0));
+        pnCenter.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Register seat No");
+        jPanel1.add(jLabel2);
+
+        pnCenter.add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/exit.png"))); // NOI18N
+        jButton1.setText("Cancel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton1);
+
+        pnCenter.add(jPanel2, java.awt.BorderLayout.PAGE_END);
+
         getContentPane().add(pnCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        ChooseSeatNo.this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,6 +159,10 @@ public class ChooseSeatNo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel pnCenter;
     // End of variables declaration//GEN-END:variables
 }
