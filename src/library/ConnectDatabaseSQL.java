@@ -21,7 +21,7 @@ public class ConnectDatabaseSQL {
 
 	public String makeURL() {
 		StringBuilder url = new StringBuilder();
-                url.append("jdbc:sqlserver://localhost:1433;databasename=airport_management;username=sa;password=123");
+                url.append("jdbc:sqlserver://localhost:1433;databasename=airport_management;username=sa;password=123456");
 		return url.toString();
 	}
 

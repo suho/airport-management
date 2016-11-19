@@ -215,11 +215,13 @@ public class PassengerManagement extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         row = tbMain.getSelectedRow();
-        Passenger item = controllerPassenger.getValueAtRows(row);
+       
         if(row >= 0){
+             Passenger item = controllerPassenger.getValueAtRows(row);
             int result = JOptionPane.showConfirmDialog(null, "Are you sure?",null, JOptionPane.YES_NO_OPTION);
                 if(result == JOptionPane.YES_OPTION) {
                 int resultDelete = controllerPassenger.deletePassenger(item.getId(), row);
+                    System.out.println("thu"+resultDelete);
                 if(resultDelete > 0){
                     JOptionPane.showMessageDialog(null, "Delete successfully!");
                 }else{

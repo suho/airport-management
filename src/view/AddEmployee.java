@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import library.ConvertDate;
+import validate.CheckMail;
 
 /**
  *
@@ -125,34 +126,34 @@ public class AddEmployee extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("Full name:");
+        jLabel1.setText("Full name*:");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel2.setText("Birthday:");
+        jLabel2.setText("Birthday*:");
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel3.setText("Gender:");
+        jLabel3.setText("Gender*:");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel4.setText("Id Card:");
+        jLabel4.setText("Id Card*:");
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel5.setText("Religion:");
+        jLabel5.setText("Religion*:");
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel6.setText("EthnicMinority:");
+        jLabel6.setText("EthnicMinority*:");
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel7.setText("Department:");
+        jLabel7.setText("Department*:");
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel8.setText("Position:");
+        jLabel8.setText("Position*:");
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel9.setText("Salary:");
+        jLabel9.setText("Salary*:");
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel10.setText("Phone:");
+        jLabel10.setText("Phone*:");
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jLabel11.setText("Avatar:");
@@ -175,10 +176,10 @@ public class AddEmployee extends javax.swing.JFrame {
         jRadioButtonFemale.setText("Female");
         jRadioButtonFemale.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel13.setText("Email:");
+        jLabel13.setText("Email*:");
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel14.setText("Address:");
+        jLabel14.setText("Address*:");
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jLabel15.setText("Permission:");
@@ -223,7 +224,7 @@ public class AddEmployee extends javax.swing.JFrame {
                                             .addComponent(jRadioButtonFemale))
                                         .addComponent(jTextFieldEthnicMinority, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                                     .addComponent(jTextFieldPosition, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 20, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,7 +239,7 @@ public class AddEmployee extends javax.swing.JFrame {
                                     .addComponent(jTextFieldReligion)))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                                 .addComponent(jTextFieldPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jTextFieldAddress))
                 .addContainerGap())
@@ -338,19 +339,42 @@ public class AddEmployee extends javax.swing.JFrame {
         }else{
             fileName = "Imagehere.jpg";
         }
+        if(datePickerBirthday.getDateStringOrEmptyString().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter Birthday ");
+            return;
+        }
         java.sql.Date birthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
+         if(buttonGroupGender.getSelection()==null){
+            JOptionPane.showMessageDialog(null, "Please enter Gender ");
+            return;
+        }
         String gender = buttonGroupGender.getSelection().getActionCommand();
         String idCard = jTextFieldIdCard.getText();
         String religion = jTextFieldReligion.getText();
         String ethnicMinority = jTextFieldEthnicMinority.getText();
         String department = jTextFieldDepartment.getText();
-        float salary = Float.parseFloat(jTextFieldSalary.getText());
+        float salary =0;
+        if(jTextFieldSalary.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter Salary ");
+            return;
+        }
+        try{
+         salary = Float.parseFloat(jTextFieldSalary.getText());
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Please enter Salary type number ");
+            return;
+        }
         String position = jTextFieldPosition.getText();
         String phone = jTextFieldPhone.getText();
         String email = jTextFieldEmail.getText();
         String address = jTextFieldAddress.getText();
         String permission = jTextFieldPermission.getText();
         Employee objEmployee = new Employee(0, fullName, fileName, birthday, gender, idCard, religion, ethnicMinority, department, position, salary, email, address, phone, permission);
+        
+         if (!isValid( objEmployee)) {
+            return;
+
+        }
         int result = controllerEmployee.addEmployee(objEmployee);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Create successfully!");
@@ -379,6 +403,67 @@ public class AddEmployee extends javax.swing.JFrame {
             Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
         }
         file = null;
+    }
+    private boolean isValid(Employee objItem) {
+         CheckMail checkMail = new CheckMail();
+        if (objItem.getFullName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  fullname");
+            return false;
+        }
+        
+        if (objItem.getIdCard().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter ID card");
+            return false;
+        }
+        if (!objItem.getIdCard().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid ID card format");
+            return false;
+        }
+        if (objItem.getEthicMinority().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter EthicMinority");
+            return false;
+        }
+        if (objItem.getPosition().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Position");
+            return false;
+        }
+        if (objItem.getPhone().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Phone");
+            return false;
+        }
+        if (!objItem.getPhone().matches("[0-9]+")) {
+             JOptionPane.showMessageDialog(this, "Please enter a valid Phone format");
+            return false;
+        }
+         if (objItem.getEmail().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Email");
+            return false;
+        }
+         
+         if(checkMail.isValidEmailAddress(objItem.getEmail())== false){
+             JOptionPane.showMessageDialog(this, "Please enter a valid email format");
+            return false;
+         }
+       
+        if (objItem.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Address");
+            return false;
+        }
+        if (objItem.getReligion().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Religion");
+            return false;
+        }
+        if (objItem.getDepartment().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Department");
+            return false;
+        }
+       
+        if (objItem.getPermission().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Permission");
+            return false;
+        }
+       return  true;
+
     }
     
     /**

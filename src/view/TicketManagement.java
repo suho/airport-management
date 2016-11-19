@@ -104,6 +104,11 @@ public class TicketManagement extends javax.swing.JPanel {
 
         jComboBoxFlightSchedule.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jComboBoxFlightSchedule.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "----- Choose Flight Schedule -----", "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxFlightSchedule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxFlightScheduleActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -208,6 +213,10 @@ public class TicketManagement extends javax.swing.JPanel {
             }
         });
     }//GEN-LAST:event_tbMainMousePressed
+
+    private void jComboBoxFlightScheduleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFlightScheduleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxFlightScheduleActionPerformed
 
     public JPopupMenu createYourPopUp(Ticket item, JTable table)
     {
