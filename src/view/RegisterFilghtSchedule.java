@@ -12,6 +12,7 @@ import controller.ControllerAirplane;
 import controller.ControllerFlightSchedule;
 import controller.ControllerPilot;
 import controller.ControllerSeatNo;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,7 @@ import javax.swing.table.TableRowSorter;
  * @author DELL
  */
 public class RegisterFilghtSchedule extends javax.swing.JFrame {
+
     private ControllerAirplane controllerAirplane;
     private ControllerPilot controllerPilot;
     private ControllerFlightSchedule controllerFlightSchedule;
@@ -62,7 +64,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         tbFindPilot.setBackground(new Color(0, 0, 0, 0));
         this.loadActionListener();
     }
-    
+
     private void findAirplane(int id) {
         TableRowSorter sorter = new TableRowSorter(tbMain.getModel());
         tbMain.setRowSorter(sorter);
@@ -72,24 +74,25 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
+
     private void findPilot(int[] id) {
         TableRowSorter sorter = new TableRowSorter(tbPilot.getModel());
         tbPilot.setRowSorter(sorter);
         ArrayList<RowFilter<AbstractTableModel, Object>> arList = new ArrayList<>();
-        for(int i = 0; i<id.length; i++){
+        for (int i = 0; i < id.length; i++) {
             RowFilter<AbstractTableModel, Object> filterAirplane = RowFilter.notFilter(RowFilter.regexFilter("(?i)" + id[i], 0));
             arList.add(filterAirplane);
         }
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
-    
-    public void loadActionListener(){
-        ((JLabel)jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-        jComboBoxAirplane.addActionListener (new ActionListener () {
+
+    public void loadActionListener() {
+        ((JLabel) jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        jComboBoxAirplane.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Airplane objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-                if(objAirplane.getId() != 0){
+                Airplane objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+                if (objAirplane.getId() != 0) {
                     findAirplane(objAirplane.getId());
                 }
             }
@@ -169,15 +172,15 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 1));
 
+        jLabel1.setText("Time finish*:");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Time finish:");
         jPanel4.add(jLabel1);
 
         dateTimePickerStart.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 15, 1, 150));
         jPanel4.add(dateTimePickerStart);
 
+        jLabel2.setText("Time start*:");
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Time start:");
         jPanel4.add(jLabel2);
 
         dateTimePickerFinish.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 15, 1, 1));
@@ -316,54 +319,60 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
 
     private void jbCheckPilotMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbCheckPilotMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jbCheckPilotMouseClicked
 
     private void jbCheckPilotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckPilotActionPerformed
         // TODO add your handling code here:
-        objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-        if(objAirplane.getId() == 0){
+        objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+        if (objAirplane.getId() == 0) {
             JOptionPane.showMessageDialog(null, "Please choose air route!");
-        }else{
+        } else {
             Calendar cal = Calendar.getInstance();
-            if((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null) ){
+            if ((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null)) {
                 JOptionPane.showMessageDialog(null, "Please choose time!");
-            }else{
+            } else {
+                if (dateTimePickerStart.getDateTimePermissive() == null) {
+                    JOptionPane.showMessageDialog(null, "Please select datetime start ");
+                    return;
+                }
                 Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+                if (dateTimePickerFinish.getDateTimePermissive() == null) {
+                    JOptionPane.showMessageDialog(null, "Please select datetime finish ");
+                    return;
+                }
+
                 Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
                 java.sql.Timestamp start = new java.sql.Timestamp(timestampStart.getTime());
                 java.sql.Timestamp finish = new java.sql.Timestamp(timestampFinish.getTime());
-                if(start.before(cal.getTime())){
+                if (start.before(cal.getTime())) {
                     JOptionPane.showMessageDialog(null, "You can't create a flight schedule with start time before time now!");
-                }else{
-                    if(start.after(finish)){
-                        JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
-                    }else{
-                        Timestamp timestampStart1 = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                        Timestamp timestampFinish1 = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                        java.sql.Timestamp start1 = new java.sql.Timestamp(timestampStart1.getTime());
-                        java.sql.Timestamp finish1 = new java.sql.Timestamp(timestampFinish1.getTime());
-                        for(int i = 0; i < tbMain.getRowCount(); i++){
-                            if(((start1.after((Date) tbMain.getValueAt(i, 2)))&&(start1.before((Date) tbMain.getValueAt(i, 3))))||((finish1.after((Date) tbMain.getValueAt(i, 2))&& (finish1.before((Date) tbMain.getValueAt(i, 3))))) || ((start1.before((Date) tbMain.getValueAt(i, 2)))&&(finish1.after((Date) tbMain.getValueAt(i, 3))))){
-                                JOptionPane.showMessageDialog(null, "Flight schedule already exist at "+ tbMain.getValueAt(i, 1) + ". Please try again!");
+                } else if (start.after(finish)) {
+                    JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
+                } else {
+                    Timestamp timestampStart1 = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+                    Timestamp timestampFinish1 = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+                    java.sql.Timestamp start1 = new java.sql.Timestamp(timestampStart1.getTime());
+                    java.sql.Timestamp finish1 = new java.sql.Timestamp(timestampFinish1.getTime());
+                    for (int i = 0; i < tbMain.getRowCount(); i++) {
+                        if (((start1.after((Date) tbMain.getValueAt(i, 2))) && (start1.before((Date) tbMain.getValueAt(i, 3)))) || ((finish1.after((Date) tbMain.getValueAt(i, 2)) && (finish1.before((Date) tbMain.getValueAt(i, 3))))) || ((start1.before((Date) tbMain.getValueAt(i, 2))) && (finish1.after((Date) tbMain.getValueAt(i, 3))))) {
+                            JOptionPane.showMessageDialog(null, "Flight schedule already exist at " + tbMain.getValueAt(i, 1) + ". Please try again!");
+                        } else {
+                            int rowCount = tbFindPilot.getRowCount();
+                            int[] a = new int[rowCount];
+                            for (int j = 0; j < tbFindPilot.getRowCount(); j++) {
+                                if (((start1.after((Date) tbFindPilot.getValueAt(j, 2))) && (start1.before((Date) tbFindPilot.getValueAt(j, 3)))) || ((finish1.after((Date) tbFindPilot.getValueAt(j, 2)) && (finish1.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start1.before((Date) tbFindPilot.getValueAt(j, 2))) && (finish1.after((Date) tbFindPilot.getValueAt(j, 3))))) {
+                                    a[j] = (int) tbFindPilot.getValueAt(i, 9);
+                                }
                             }
-                            else{
-                                int rowCount = tbFindPilot.getRowCount();
-                                int[] a= new int[rowCount];
-                                for(int j = 0; j < tbFindPilot.getRowCount(); j++){
-                                    if(((start1.after((Date) tbFindPilot.getValueAt(j, 2)))&&(start1.before((Date) tbFindPilot.getValueAt(j, 3))))||((finish1.after((Date) tbFindPilot.getValueAt(j, 2))&& (finish1.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start1.before((Date) tbFindPilot.getValueAt(j, 2)))&&(finish1.after((Date) tbFindPilot.getValueAt(j, 3))))){
-                                        a[j] = (int) tbFindPilot.getValueAt(i, 9);
-                                    }
-                                }
-                                if(a != null){
-                                    findPilot(a);
-                                }
+                            if (a != null) {
+                                findPilot(a);
                             }
                         }
                     }
                 }
             }
-            
+
         }
     }//GEN-LAST:event_jbCheckPilotActionPerformed
 
@@ -373,35 +382,52 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
-        if(idPilot == 0){
+        if (idPilot == 0) {
             JOptionPane.showMessageDialog(null, "Please choose pilot!");
-        }else{
-            if(jTextFieldNumberSeatNo.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please enter number seat No!");
-            }else{
-                int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
-                Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                if(jTextFieldNameFlight.getText().isEmpty()){
-                    nameFlight = jComboBoxAirplane.getName();
-                }else{
-                    nameFlight = jTextFieldNameFlight.getText();
-                }
-                objFlightSchedule = new FlightSchedule(0, nameFlight, timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
-                if(objFlightSchedule != null){
-                    int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
-                    if(idFlightSchedule > 0){
-                        int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
-                        if(result > 0){
-                            JOptionPane.showMessageDialog(null, "Create suceessfully!");
-                            RegisterFilghtSchedule.this.dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Error. Please try again!");
-                        }
+        } else if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter number seat No!");
+        } else {
+            int numberSeatNo = 0;
+            if (jTextFieldNumberSeatNo.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please enter Number seatNo ");
+                return;
+            }
+            try {
+                numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Please enter seatNo Number Type number ");
+                return;
+            }
+            if (dateTimePickerStart.getDateTimePermissive() == null) {
+                JOptionPane.showMessageDialog(null, "Please select datetime start ");
+                return;
+            }
+            Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+            if (dateTimePickerStart.getDateTimePermissive() == null) {
+                JOptionPane.showMessageDialog(null, "Please select datetime finish ");
+                return;
+            }
+            Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+            objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+            if (jTextFieldNameFlight.getText().isEmpty()) {
+                nameFlight = objAirplane.getName();
+            } else {
+                nameFlight = jTextFieldNameFlight.getText();
+            }
+            objFlightSchedule = new FlightSchedule(0, nameFlight, timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
+            if (objFlightSchedule != null) {
+                int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
+                if (idFlightSchedule > 0) {
+                    int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
+                    if (result > 0) {
+                        JOptionPane.showMessageDialog(null, "Create suceessfully!");
+                        RegisterFilghtSchedule.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error. Please try again!");
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Please check validate!");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please check validate!");
             }
         }
     }//GEN-LAST:event_btSubmitActionPerformed

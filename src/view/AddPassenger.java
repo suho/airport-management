@@ -20,6 +20,7 @@ import library.ConvertDate;
  * @author DELL
  */
 public class AddPassenger extends javax.swing.JFrame {
+
     private ConvertDate convertDate;
     private ControllerFlightSchedule controllerFlightSchedule;
     private ControllerPassenger controllerPassenger;
@@ -28,7 +29,6 @@ public class AddPassenger extends javax.swing.JFrame {
     private Passenger objPassenger;
     private int idFlightSchedule1 = 0;
     private int idSeatNo1 = 0;
-    
 
     /**
      * Creates new form AddPassenger
@@ -115,28 +115,28 @@ public class AddPassenger extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        jLabel1.setText("Passport:");
+        jLabel1.setText("Passport*:");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel2.setText("Full name:");
+        jLabel2.setText("Full name*:");
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel3.setText("Birthday:");
+        jLabel3.setText("Birthday*:");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel4.setText("Native:");
+        jLabel4.setText("Native*:");
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel5.setText("Gender:");
+        jLabel5.setText("Gender*:");
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel6.setText("Nationality:");
+        jLabel6.setText("Nationality*:");
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel7.setText("Address:");
+        jLabel7.setText("Address*:");
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel8.setText("Phone:");
+        jLabel8.setText("Phone*:");
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jTextFieldPassport.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -161,9 +161,9 @@ public class AddPassenger extends javax.swing.JFrame {
             }
         });
 
-        jButtonSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search-icon.png"))); // NOI18N
         jButtonSearch.setText("search");
+        jButtonSearch.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSearchActionPerformed(evt);
@@ -192,7 +192,7 @@ public class AddPassenger extends javax.swing.JFrame {
                     .addComponent(jTextFieldNationality, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldNative, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldFullName, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(datePickerBirthday, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                    .addComponent(datePickerBirthday, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jRadioButtonMale)
                         .addGap(18, 18, 18)
@@ -263,48 +263,59 @@ public class AddPassenger extends javax.swing.JFrame {
         // TODO add your handling code here:
         String passport = jTextFieldPassport.getText();
         String fullName = jTextFieldFullName.getText();
+        if (datePickerBirthday.getDateStringOrEmptyString().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter Birthday ");
+            return;
+        }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
         String nativeCountry = jTextFieldNative.getText();
+        if (buttonGroupGender.getSelection() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter Gender ");
+            return;
+        }
         String gender = buttonGroupGender.getSelection().getActionCommand();
         String nationality = jTextFieldNationality.getText();
         String phone = jTextFieldPhone.getText();
         String address = jTextFieldAddress.getText();
-        if((idFlightSchedule1 != 0) && (idSeatNo1 != 0) && (objPassenger != null)){
+        if ((idFlightSchedule1 != 0) && (idSeatNo1 != 0) && (objPassenger != null)) {
             Ticket objTicket = new Ticket(0, objPassenger.getId(), idFlightSchedule1, idSeatNo1);
             int result = controllerTicket.addTicket(objTicket);
-            if(result > 0){
+            if (result > 0) {
                 int updateSeatNo = controllerSeatNo.updateSeatNo(idSeatNo1);
-                if(updateSeatNo > 0){
+                if (updateSeatNo > 0) {
                     JOptionPane.showMessageDialog(null, "Order successfully!");
                     AddPassenger.this.dispose();
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Error when order seat no. Please try again!");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Error when order ticket. Please try again!");
             }
-        }else{
+        } else {
             Passenger objPassenger = new Passenger(0, passport, fullName, sqlBirthday, nativeCountry, gender, nationality, phone, address);
+            if (!isValid(objPassenger)) {
+                return;
+
+            }
             int idPassenger = controllerPassenger.addPassenger(objPassenger);
-            if((idPassenger > 0) && (idFlightSchedule1 != 0) && (idSeatNo1 != 0)){
+            if ((idPassenger > 0) && (idFlightSchedule1 != 0) && (idSeatNo1 != 0)) {
                 Ticket objTicket = new Ticket(0, idPassenger, idFlightSchedule1, idSeatNo1);
                 int result = controllerTicket.addTicket(objTicket);
-                if(result > 0){
+                if (result > 0) {
                     int updateSeatNo = controllerSeatNo.updateSeatNo(idSeatNo1);
-                    if(updateSeatNo > 0){
+                    if (updateSeatNo > 0) {
                         JOptionPane.showMessageDialog(null, "Order successfully!");
                         AddPassenger.this.dispose();
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Error when order seat no. Please try again!");
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Error when order ticket. Please try again!");
                 }
             }
-            if(idPassenger < 0){
+            if (idPassenger < 0) {
                 JOptionPane.showMessageDialog(null, "Error when create passenger. Please try again!");
-            }
-            else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Create passenger successfully!");
                 AddPassenger.this.dispose();
             }
@@ -322,21 +333,21 @@ public class AddPassenger extends javax.swing.JFrame {
         // TODO add your handling code here:
         String passport = jTextFieldPassport.getText();
         objPassenger = controllerPassenger.findPassenger(passport);
-        if(objPassenger != null){
+        if (objPassenger != null) {
             JOptionPane.showMessageDialog(null, "Found successfully!");
             setForm(objPassenger);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Not found!!");
         }
-        
+
     }//GEN-LAST:event_jButtonSearchActionPerformed
 
     private void jTextFieldPassportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldPassportMouseClicked
         // TODO add your handling code here:
         jTextFieldPassport.setText("");
     }//GEN-LAST:event_jTextFieldPassportMouseClicked
-    
-    public void setForm(Passenger objPassenger){
+
+    public void setForm(Passenger objPassenger) {
         jTextFieldPassport.setText(objPassenger.getPassport());
         jTextFieldFullName.setText(objPassenger.getFullName());
         java.sql.Date sqlDate = new java.sql.Date(objPassenger.getBirthday().getTime());
@@ -346,12 +357,51 @@ public class AddPassenger extends javax.swing.JFrame {
         jTextFieldNationality.setText(objPassenger.getNativeCountry());
         jTextFieldPhone.setText(objPassenger.getPhone());
         jTextFieldAddress.setText(objPassenger.getAddress());
-        if(objPassenger.getGender().equals("Male")){
+        if (objPassenger.getGender().equals("Male")) {
             jRadioButtonMale.setSelected(true);
-        }else{
+        } else {
             jRadioButtonFemale.setSelected(true);
         }
     }
+
+    private boolean isValid(Passenger objItem) {
+        if (objItem.getPassport().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  Passport");
+            return false;
+        }
+        if (!objItem.getPassport().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid Passport format");
+            return false;
+        }
+        if (objItem.getFullName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  fullname");
+            return false;
+        }
+        if (objItem.getNativeCountry().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter NativeCountry");
+            return false;
+        }
+        if (objItem.getNationality().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Nationality");
+            return false;
+        }
+        if (objItem.getPhone().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Phone");
+            return false;
+        }
+        if (!objItem.getPhone().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid Phone format");
+            return false;
+        }
+        if (objItem.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Address");
+            return false;
+        }
+
+        return true;
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -382,7 +432,7 @@ public class AddPassenger extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddPassenger(0,0).setVisible(true);
+                new AddPassenger(0, 0).setVisible(true);
             }
         });
     }

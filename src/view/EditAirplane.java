@@ -82,13 +82,13 @@ public class EditAirplane extends javax.swing.JFrame {
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Name airplane:");
+        jLabel2.setText("Name airplane*:");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Start place:");
+        jLabel3.setText("Start place*:");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Finish place:");
+        jLabel4.setText("Finish place*:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -103,8 +103,8 @@ public class EditAirplane extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldName)
-                    .addComponent(jTextFieldStart, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                    .addComponent(jTextFieldFinish, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE))
+                    .addComponent(jTextFieldStart, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                    .addComponent(jTextFieldFinish, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -133,6 +133,10 @@ public class EditAirplane extends javax.swing.JFrame {
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         // TODO add your handling code here:
         Airplane item = new Airplane(objAirplane.getId(), jTextFieldName.getText(), jTextFieldStart.getText(), jTextFieldFinish.getText());
+        if (!isValid(item)) {
+            return;
+
+        }
         int result = controllerAirplane.editAirplane(item);
         if(result > 0){
             JOptionPane.showMessageDialog(null, "Edit successfully!");
@@ -152,7 +156,25 @@ public class EditAirplane extends javax.swing.JFrame {
         jTextFieldStart.setText(objAirplane.getStartPlace());
         jTextFieldFinish.setText(objAirplane.getFinishPlace());
     }
-    
+     private boolean isValid(Airplane objItem) {
+
+        if (objItem.getName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  name");
+            return false;
+        }
+
+        if (objItem.getStartPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter start place");
+            return false;
+        }
+        if (objItem.getFinishPlace().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter finish place");
+            return false;
+        }
+
+        return true;
+
+    }
     /**
      * @param args the command line arguments
      */

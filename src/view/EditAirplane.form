@@ -102,8 +102,8 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jTextFieldName" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jTextFieldStart" alignment="0" pref="273" max="32767" attributes="0"/>
-                      <Component id="jTextFieldFinish" alignment="0" pref="273" max="32767" attributes="0"/>
+                      <Component id="jTextFieldStart" alignment="0" pref="265" max="32767" attributes="0"/>
+                      <Component id="jTextFieldFinish" alignment="0" pref="265" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -138,7 +138,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Name airplane:"/>
+            <Property name="text" type="java.lang.String" value="Name airplane*:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldName">
@@ -148,7 +148,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Start place:"/>
+            <Property name="text" type="java.lang.String" value="Start place*:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldStart">
@@ -160,7 +160,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Finish place:"/>
+            <Property name="text" type="java.lang.String" value="Finish place*:"/>
           </Properties>
         </Component>
       </SubComponents>
