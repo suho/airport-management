@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import model.ModelFlightSchedule;
+import model.ModelTicket;
 import renderer.RendererCenterRenderer;
 import renderer.RendererComboBoxModelFlightSchedule;
 
