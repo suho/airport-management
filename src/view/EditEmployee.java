@@ -402,6 +402,8 @@ public class EditEmployee extends javax.swing.JFrame {
                 fileOld.delete();
             }
             upLoadFile(file);
+        }else{
+            fileName = objEmployee.getAvatar();
         }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
         String gender = buttonGroupGender.getSelection().getActionCommand();

@@ -156,7 +156,7 @@ public class ControllerPassenger extends AbstractTableModel{
         int result = 0;
         System.out.println("controller.ControllerPassenger.deletePassenger()" + id);
         int deleteTicket = modelTicket.deleteTicketPassenger(id);
-        if(deleteTicket > 0){
+        if(deleteTicket >= 0){
             result = modelPassenger.deletePassenger(id);
             if(result > 0){
                 int rowModel = table.convertRowIndexToModel(row);

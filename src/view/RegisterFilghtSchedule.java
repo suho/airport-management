@@ -41,7 +41,10 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     private Pilot objPilot;
     private int idPilot = 0;
     private int rowPilot;
-    private String nameFlight = "";
+    private String nameFlight = null;
+    private java.sql.Timestamp start;
+    private java.sql.Timestamp finish;
+    private int statusTablePilot = 0;
 
     /**
      * Creates new form NewJFrame1
@@ -60,6 +63,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         controllerFlightSchedulePilot.loadTable();
         tbFindPilot.setOpaque(false);
         tbFindPilot.setBackground(new Color(0, 0, 0, 0));
+        tbPilot.setEnabled(false);
         this.loadActionListener();
     }
     
@@ -320,97 +324,105 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     }//GEN-LAST:event_jbCheckPilotMouseClicked
 
     private void jbCheckPilotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckPilotActionPerformed
-        // TODO add your handling code here:
+        if(!isVali()){
+            return;
+        }
+        if(idPilot == 0){
+            JOptionPane.showMessageDialog(null, "Please choose pilot!");
+        }
+        tbPilot.setEnabled(true);
+        statusTablePilot = 1;
+        int rowCount = tbFindPilot.getRowCount();
+        int[] a= new int[rowCount];
+        for(int j = 0; j < tbFindPilot.getRowCount(); j++){
+            if(((start.after((Date) tbFindPilot.getValueAt(j, 2)))&&(start.before((Date) tbFindPilot.getValueAt(j, 3))))||((finish.after((Date) tbFindPilot.getValueAt(j, 2))&& (finish.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start.before((Date) tbFindPilot.getValueAt(j, 2)))&&(finish.after((Date) tbFindPilot.getValueAt(j, 3))))){
+                a[j] = (int) tbFindPilot.getValueAt(j, 9);
+            }
+        }
+        if(a != null){
+            findPilot(a);
+        }
+    }//GEN-LAST:event_jbCheckPilotActionPerformed
+    
+    public boolean isVali(){
+        Calendar cal = Calendar.getInstance();
         objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
         if(objAirplane.getId() == 0){
             JOptionPane.showMessageDialog(null, "Please choose air route!");
-        }else{
-            Calendar cal = Calendar.getInstance();
-            if((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null) ){
-                JOptionPane.showMessageDialog(null, "Please choose time!");
-            }else{
-                Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                java.sql.Timestamp start = new java.sql.Timestamp(timestampStart.getTime());
-                java.sql.Timestamp finish = new java.sql.Timestamp(timestampFinish.getTime());
-                if(start.before(cal.getTime())){
-                    JOptionPane.showMessageDialog(null, "You can't create a flight schedule with start time before time now!");
-                }else{
-                    if(start.after(finish)){
-                        JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
-                    }else{
-                        Timestamp timestampStart1 = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                        Timestamp timestampFinish1 = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                        java.sql.Timestamp start1 = new java.sql.Timestamp(timestampStart1.getTime());
-                        java.sql.Timestamp finish1 = new java.sql.Timestamp(timestampFinish1.getTime());
-                        for(int i = 0; i < tbMain.getRowCount(); i++){
-                            if(((start1.after((Date) tbMain.getValueAt(i, 2)))&&(start1.before((Date) tbMain.getValueAt(i, 3))))||((finish1.after((Date) tbMain.getValueAt(i, 2))&& (finish1.before((Date) tbMain.getValueAt(i, 3))))) || ((start1.before((Date) tbMain.getValueAt(i, 2)))&&(finish1.after((Date) tbMain.getValueAt(i, 3))))){
-                                JOptionPane.showMessageDialog(null, "Flight schedule already exist at "+ tbMain.getValueAt(i, 1) + ". Please try again!");
-                            }
-                            else{
-                                int rowCount = tbFindPilot.getRowCount();
-                                int[] a= new int[rowCount];
-                                for(int j = 0; j < tbFindPilot.getRowCount(); j++){
-                                    if(((start1.after((Date) tbFindPilot.getValueAt(j, 2)))&&(start1.before((Date) tbFindPilot.getValueAt(j, 3))))||((finish1.after((Date) tbFindPilot.getValueAt(j, 2))&& (finish1.before((Date) tbFindPilot.getValueAt(j, 3))))) || ((start1.before((Date) tbFindPilot.getValueAt(j, 2)))&&(finish1.after((Date) tbFindPilot.getValueAt(j, 3))))){
-                                        a[j] = (int) tbFindPilot.getValueAt(i, 9);
-                                    }
-                                }
-                                if(a != null){
-                                    findPilot(a);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            
+            return false;
         }
-    }//GEN-LAST:event_jbCheckPilotActionPerformed
-
+        if(jTextFieldNameFlight.getText().isEmpty()){
+            nameFlight = objAirplane.getName();
+        }else{
+            nameFlight = jTextFieldNameFlight.getText();
+        }
+        if((dateTimePickerStart.getDateTimePermissive() == null) || (dateTimePickerFinish.getDateTimePermissive() == null) ){
+            JOptionPane.showMessageDialog(null, "Please choose time!");
+            return false;
+        }
+        Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+        Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+        start = new java.sql.Timestamp(timestampStart.getTime());
+        finish = new java.sql.Timestamp(timestampFinish.getTime());
+        if(start.before(cal.getTime())){
+            JOptionPane.showMessageDialog(null, "You can't create a flight schedule with start time before time now!");
+            return false;
+        }
+        if(start.after(finish)){
+            JOptionPane.showMessageDialog(null, "Please check information(date order need before date check out)!");
+            return false;
+        }
+        for(int i = 0; i < tbMain.getRowCount(); i++){
+            if(((start.after((Date) tbMain.getValueAt(i, 2)))&&(start.before((Date) tbMain.getValueAt(i, 3))))||((finish.after((Date) tbMain.getValueAt(i, 2))&& (finish.before((Date) tbMain.getValueAt(i, 3))))) || ((start.before((Date) tbMain.getValueAt(i, 2)))&&(finish.after((Date) tbMain.getValueAt(i, 3))))){
+                JOptionPane.showMessageDialog(null, "Flight schedule already exist at "+ tbMain.getValueAt(i, 1) + ". Please try again!");
+                return false;
+            }
+        }
+        if(jTextFieldNumberSeatNo.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter number seat No!");
+            return false;
+        }
+        return true;
+    }
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         RegisterFilghtSchedule.this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSubmitActionPerformed
-        if(idPilot == 0){
-            JOptionPane.showMessageDialog(null, "Please choose pilot!");
-        }else{
-            if(jTextFieldNumberSeatNo.getText().isEmpty()){
-                JOptionPane.showMessageDialog(null, "Please enter number seat No!");
-            }else{
-                int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
-                Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
-                Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
-                if(jTextFieldNameFlight.getText().isEmpty()){
-                    nameFlight = jComboBoxAirplane.getName();
+        if(!isVali()){
+            return;
+        }
+        int numberSeatNo = Integer.parseInt(jTextFieldNumberSeatNo.getText());
+        Timestamp timestampStart = Timestamp.valueOf(dateTimePickerStart.getDateTimePermissive());
+        Timestamp timestampFinish = Timestamp.valueOf(dateTimePickerFinish.getDateTimePermissive());
+        objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
+        objFlightSchedule = new FlightSchedule(0, nameFlight, timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
+        if(objFlightSchedule != null){
+            int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
+            if(idFlightSchedule > 0){
+                int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
+                if(result > 0){
+                    JOptionPane.showMessageDialog(null, "Create suceessfully!");
+                    RegisterFilghtSchedule.this.dispose();
                 }else{
-                    nameFlight = jTextFieldNameFlight.getText();
-                }
-                objFlightSchedule = new FlightSchedule(0, nameFlight, timestampStart, timestampFinish, objAirplane.getId(), idPilot, numberSeatNo);
-                if(objFlightSchedule != null){
-                    int idFlightSchedule = controllerFlightSchedule.addFlightSchedule(objFlightSchedule);
-                    if(idFlightSchedule > 0){
-                        int result = controllerSeatNo.addSeatNo(idFlightSchedule, numberSeatNo);
-                        if(result > 0){
-                            JOptionPane.showMessageDialog(null, "Create suceessfully!");
-                            RegisterFilghtSchedule.this.dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Error. Please try again!");
-                        }
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Please check validate!");
+                    JOptionPane.showMessageDialog(null, "Error. Please try again!");
                 }
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "Please check validate!");
         }
     }//GEN-LAST:event_btSubmitActionPerformed
 
     private void tbPilotMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPilotMousePressed
-        // TODO add your handling code here:
-        rowPilot = tbPilot.getSelectedRow();
-        objPilot = controllerPilot.getValueAtRows(rowPilot);
-        idPilot = objPilot.getId();
+        if(statusTablePilot == 0){
+            JOptionPane.showMessageDialog(null, "Please click check pilot!");
+        } else {
+            rowPilot = tbPilot.getSelectedRow();
+            objPilot = controllerPilot.getValueAtRows(rowPilot);
+            idPilot = objPilot.getId();
+        }
     }//GEN-LAST:event_tbPilotMousePressed
 
     /**
@@ -478,4 +490,6 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
     private javax.swing.JTable tbMain;
     private javax.swing.JTable tbPilot;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import model.ModelFlightSchedule;
+import model.ModelTicket;
 import renderer.RendererCenterRenderer;
 import renderer.RendererComboBoxModelFlightSchedule;
 
@@ -26,10 +27,12 @@ public class ControllerFlightSchedule extends AbstractTableModel{
     private JTable table;
     private ModelFlightSchedule modelFlightSchedule;
     private RendererCenterRenderer renderer;
+    private ModelTicket modelTicket;
     
     public ControllerFlightSchedule(JTable table){
         this.table = table;
         modelFlightSchedule = new ModelFlightSchedule();
+        modelTicket = new ModelTicket();
         renderer = new RendererCenterRenderer();
         alFlightSchedule = modelFlightSchedule.getList();
     }
@@ -164,7 +167,8 @@ public class ControllerFlightSchedule extends AbstractTableModel{
     }
 
     public int deleteFlightSchedule(int id, int row) {
-        int result = modelFlightSchedule.deleteEmployee(id);
+        int deleteTicket = modelTicket.deleteTicketFLightSchedule(id);
+        int result = modelFlightSchedule.deleteFlightSchedule(id);
         if(result > 0){
             int rowModel = table.convertRowIndexToModel(row);
             alFlightSchedule.remove(rowModel);
