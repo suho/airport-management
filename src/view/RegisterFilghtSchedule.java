@@ -12,6 +12,7 @@ import controller.ControllerAirplane;
 import controller.ControllerFlightSchedule;
 import controller.ControllerPilot;
 import controller.ControllerSeatNo;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,7 @@ import javax.swing.table.TableRowSorter;
  * @author DELL
  */
 public class RegisterFilghtSchedule extends javax.swing.JFrame {
+
     private ControllerAirplane controllerAirplane;
     private ControllerPilot controllerPilot;
     private ControllerFlightSchedule controllerFlightSchedule;
@@ -66,7 +68,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         tbPilot.setEnabled(false);
         this.loadActionListener();
     }
-    
+
     private void findAirplane(int id) {
         TableRowSorter sorter = new TableRowSorter(tbMain.getModel());
         tbMain.setRowSorter(sorter);
@@ -76,24 +78,25 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
+
     private void findPilot(int[] id) {
         TableRowSorter sorter = new TableRowSorter(tbPilot.getModel());
         tbPilot.setRowSorter(sorter);
         ArrayList<RowFilter<AbstractTableModel, Object>> arList = new ArrayList<>();
-        for(int i = 0; i<id.length; i++){
+        for (int i = 0; i < id.length; i++) {
             RowFilter<AbstractTableModel, Object> filterAirplane = RowFilter.notFilter(RowFilter.regexFilter("(?i)" + id[i], 0));
             arList.add(filterAirplane);
         }
         RowFilter<AbstractTableModel, Object> find = RowFilter.andFilter(arList);
         sorter.setRowFilter(find);
     }
-    
-    public void loadActionListener(){
-        ((JLabel)jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-        jComboBoxAirplane.addActionListener (new ActionListener () {
+
+    public void loadActionListener() {
+        ((JLabel) jComboBoxAirplane.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        jComboBoxAirplane.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Airplane objAirplane = (Airplane)jComboBoxAirplane.getSelectedItem();
-                if(objAirplane.getId() != 0){
+                Airplane objAirplane = (Airplane) jComboBoxAirplane.getSelectedItem();
+                if (objAirplane.getId() != 0) {
                     findAirplane(objAirplane.getId());
                 }
             }
@@ -173,15 +176,15 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 10, 1));
 
+        jLabel1.setText("Time finish*:");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Time finish:");
         jPanel4.add(jLabel1);
 
         dateTimePickerStart.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 15, 1, 150));
         jPanel4.add(dateTimePickerStart);
 
+        jLabel2.setText("Time start*:");
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Time start:");
         jPanel4.add(jLabel2);
 
         dateTimePickerFinish.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 15, 1, 1));
@@ -320,7 +323,7 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
 
     private void jbCheckPilotMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbCheckPilotMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jbCheckPilotMouseClicked
 
     private void jbCheckPilotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckPilotActionPerformed
@@ -409,6 +412,8 @@ public class RegisterFilghtSchedule extends javax.swing.JFrame {
                 }else{
                     JOptionPane.showMessageDialog(null, "Error. Please try again!");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please check validate!");
             }
         }else{
             JOptionPane.showMessageDialog(null, "Please check validate!");

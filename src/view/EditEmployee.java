@@ -25,11 +25,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import library.ConvertDate;
+import validate.CheckMail;
+
 /**
  *
  * @author DELL
  */
 public class EditEmployee extends javax.swing.JFrame {
+
     private ControllerEmployee controllerEmployee;
     private ConvertDate convertDate;
     private String filePath;
@@ -50,15 +53,14 @@ public class EditEmployee extends javax.swing.JFrame {
         jRadioButtonFemale.setActionCommand("Female");
         setForm();
     }
-    
-    
-    public void setForm(){
+
+    public void setForm() {
         jTextFieldIdEmployee.setText(Integer.toString(objEmployee.getId()));
         jTextFieldIdEmployee.setEnabled(false);
         jTextFieldFullName.setText(objEmployee.getFullName());
-        if(objEmployee.getGender().equals("Male")){
+        if (objEmployee.getGender().equals("Male")) {
             jRadioButtonMale.setSelected(true);
-        }else{
+        } else {
             jRadioButtonFemale.setSelected(true);
         }
         if (!objEmployee.getAvatar().isEmpty()) {
@@ -84,7 +86,7 @@ public class EditEmployee extends javax.swing.JFrame {
         jTextFieldAddress.setText(objEmployee.getAddress());
         jTextFieldPermission.setText(objEmployee.getPermission());
     }
-    
+
     public void setPicture(JLabel label, File file) {
         try {
             BufferedImage image = ImageIO.read(file);
@@ -109,6 +111,7 @@ public class EditEmployee extends javax.swing.JFrame {
             Logger.getLogger(AddEmployee.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -192,34 +195,34 @@ public class EditEmployee extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setText("Full name:");
+        jLabel1.setText("Full name*:");
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel2.setText("Birthday:");
+        jLabel2.setText("Birthday*:");
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel3.setText("Gender:");
+        jLabel3.setText("Gender*:");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel4.setText("Id Card:");
+        jLabel4.setText("Id Card*:");
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel5.setText("Religion:");
+        jLabel5.setText("Religion*:");
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel6.setText("EthnicMinority:");
+        jLabel6.setText("EthnicMinority*:");
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel7.setText("Department:");
+        jLabel7.setText("Department*:");
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel8.setText("Position:");
+        jLabel8.setText("Position*:");
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel9.setText("Salary:");
+        jLabel9.setText("Salary*:");
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel10.setText("Phone:");
+        jLabel10.setText("Phone*:");
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         jLabel11.setText("Avatar:");
@@ -242,17 +245,19 @@ public class EditEmployee extends javax.swing.JFrame {
         jRadioButtonFemale.setText("Female");
         jRadioButtonFemale.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel13.setText("Email:");
+        jLabel13.setText("Email*:");
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel14.setText("Address:");
+        jLabel14.setText("Address*:");
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel15.setText("Permission:");
+        jLabel15.setText("Permission*:");
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
-        jLabel17.setText("Id employee:");
+        jLabel17.setText("Id employee*:");
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        jTextFieldIdEmployee.setEnabled(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -291,7 +296,7 @@ public class EditEmployee extends javax.swing.JFrame {
                                         .addComponent(jTextFieldEthnicMinority, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                                     .addComponent(jTextFieldPosition, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jTextFieldIdEmployee, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 20, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,7 +317,7 @@ public class EditEmployee extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                                 .addComponent(jTextFieldPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jTextFieldAddress))
                 .addContainerGap())
@@ -396,7 +401,7 @@ public class EditEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         int idEmployee = Integer.parseInt(jTextFieldIdEmployee.getText());
         String fullName = jTextFieldFullName.getText();
-        if(file != null){
+        if (file != null) {
             File fileOld = new File("files/" + objEmployee.getAvatar());
             if (fileOld.exists()) {
                 fileOld.delete();
@@ -406,23 +411,41 @@ public class EditEmployee extends javax.swing.JFrame {
             fileName = objEmployee.getAvatar();
         }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
+        if (buttonGroupGender.getSelection() == null) {
+            JOptionPane.showMessageDialog(null, "Please enter Gender ");
+            return;
+        }
         String gender = buttonGroupGender.getSelection().getActionCommand();
         String idCard = jTextFieldIdCard.getText();
         String religion = jTextFieldReligion.getText();
         String ethnicMinority = jTextFieldEthnicMinority.getText();
         String department = jTextFieldDepartment.getText();
-        float salary = Float.parseFloat(jTextFieldSalary.getText());
+        float salary = 0;
+        if (jTextFieldSalary.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please enter Salary ");
+            return;
+        }
+        try {
+            salary = Float.parseFloat(jTextFieldSalary.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Please enter Salary dạng số ");
+            return;
+        }
         String position = jTextFieldPosition.getText();
         String phone = jTextFieldPhone.getText();
         String email = jTextFieldEmail.getText();
         String address = jTextFieldAddress.getText();
         String permission = jTextFieldPermission.getText();
         Employee editEmployee = new Employee(idEmployee, fullName, fileName, sqlBirthday, gender, idCard, religion, ethnicMinority, department, position, salary, email, address, phone, permission);
+        if (!isValid(editEmployee)) {
+            return;
+
+        }
         int result = controllerEmployee.editEmployee(editEmployee);
-        if(result > 0){
+        if (result > 0) {
             JOptionPane.showMessageDialog(null, "Edit successfully!");
             EditEmployee.this.dispose();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Error. Please try again!");
         }
     }//GEN-LAST:event_jButtonSubmitActionPerformed
@@ -436,7 +459,7 @@ public class EditEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         JFileChooser chooser = new JFileChooser("D:\\Picture");
         int result = chooser.showDialog(null, "Upload picture");
-        if(result==JFileChooser.APPROVE_OPTION){
+        if (result == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
             filePath = file.getAbsolutePath();
             ImageIcon icon = new ImageIcon(new ImageIcon(filePath).getImage().getScaledInstance(120, 80, Image.SCALE_SMOOTH));
@@ -444,12 +467,12 @@ public class EditEmployee extends javax.swing.JFrame {
             JOptionPane.showConfirmDialog(null, "Upload successfully!");
         }
     }//GEN-LAST:event_jButtonUploadActionPerformed
-    
-    public void upLoadFile(File file){
+
+    public void upLoadFile(File file) {
         fileName = System.nanoTime() + "_" + file.getName();
         filePath = file.getAbsolutePath();
         Path source = Paths.get(filePath);
-        Path target = Paths.get("files/"+fileName);
+        Path target = Paths.get("files/" + fileName);
         file = target.toFile();
         try {
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
@@ -459,6 +482,67 @@ public class EditEmployee extends javax.swing.JFrame {
         }
         file = null;
     }
+
+    private boolean isValid(Employee objItem) {
+        CheckMail checkMail = new CheckMail();
+        if (objItem.getFullName().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter  fullname");
+            return false;
+        }
+
+        if (objItem.getIdCard().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter ID card");
+            return false;
+        }
+        if (!objItem.getIdCard().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid ID card format");
+            return false;
+        }
+        if (objItem.getEthicMinority().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter EthicMinority");
+            return false;
+        }
+        if (objItem.getPosition().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Position");
+            return false;
+        }
+        if (objItem.getPhone().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Phone");
+            return false;
+        }
+        if (!objItem.getPhone().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid Phone format");
+            return false;
+        }
+        if (objItem.getEmail().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Email");
+            return false;
+        }
+        if (checkMail.isValidEmailAddress(objItem.getEmail()) == false) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid email format");
+            return false;
+        }
+        if (objItem.getAddress().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Address");
+            return false;
+        }
+        if (objItem.getReligion().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Religion");
+            return false;
+        }
+        if (objItem.getDepartment().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Department");
+            return false;
+        }
+
+        if (objItem.getPermission().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter Permission");
+            return false;
+        }
+        return true;
+
+    }
+
     /**
      * @param args the command line arguments
      */
