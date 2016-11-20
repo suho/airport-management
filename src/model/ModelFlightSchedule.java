@@ -143,7 +143,7 @@ public class ModelFlightSchedule {
         }
         return result;
     }
-    public int deleteEmployee(int id) {
+    public int deleteFlightSchedule(int id) {
         int result = 0;
         lcdb = new ConnectDatabaseSQL();
         conn = lcdb.getConnectData();

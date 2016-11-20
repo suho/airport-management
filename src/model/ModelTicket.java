@@ -60,7 +60,7 @@ public class ModelTicket {
        lcdb = new ConnectDatabaseSQL();
         ArrayList<Ticket> alRegisterFlightSchedules = new ArrayList<>();
         conn = lcdb.getConnectData();
-        String sql = "SELECT tickets.id as id, passengers.fullName as namePassenger, flightSchedules.name as nameFLightSchedule, seatNo.name as nameSeatNo, tickets.idPassenger, tickets.idFlightSchedule, tickets.idSeatNo FROM tickets,flightSchedules,passengers,seatNo WHERE tickets.idPassenger = passengers.id AND tickets.idFlightSchedule = flightSchedules.id AND tickets.idSeatNo = seatNo.id ORDER BY tickets.id DESC";
+        String sql = "SELECT tickets.id as id, passengers.fullName as namePassenger, flightSchedules.name as nameFLightSchedule, seatNo.name as nameSeatNo, tickets.idPassenger, tickets.idFlightSchedule, tickets.idSeatNo FROM tickets,flightSchedules,passengers,seatNo WHERE tickets.idPassenger = passengers.id AND tickets.idFlightSchedule = flightSchedules.id AND tickets.idSeatNo = seatNo.id AND flightSchedules.status = 'false' ORDER BY tickets.id DESC";
         try {
             st = conn.createStatement();
             rs = st.executeQuery(sql);
@@ -145,5 +145,9 @@ public class ModelTicket {
             }
         }
         return result;
+    }
+
+    public int deleteTicketFLightSchedule(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

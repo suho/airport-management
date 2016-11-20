@@ -410,10 +410,6 @@ public class EditEmployee extends javax.swing.JFrame {
         }else{
             fileName = objEmployee.getAvatar();
         }
-        if (datePickerBirthday.getDateStringOrEmptyString().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Please enter Birthday ");
-            return;
-        }
         java.sql.Date sqlBirthday = new java.sql.Date(convertDate.getDateTime(datePickerBirthday.getDateStringOrEmptyString()).getTime());
         if (buttonGroupGender.getSelection() == null) {
             JOptionPane.showMessageDialog(null, "Please enter Gender ");
